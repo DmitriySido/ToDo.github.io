@@ -6,29 +6,38 @@
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;500;700;900&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="css/main.css"/>
-	<title>ToDo</title>
+	<title>ToDo-1.0</title>
 </head>
-<body>
+<body class="body">
 
-	<header class="header wrapper">
-		<img class="header-logo" src="img/Logo.png" alt="ToDo Logo">
+	<header class="header">
+		<div class="header-inner">
+			<div class="logo-wrapper">
+				<img class="header-logo" src="img/Logo.png" alt="ToDo Logo">
+			</div>
 
-		<form class="forma" id="form">
-			<div class="form-group">
+			<form class="forma" id="form">
 				<input type="text" class="form-input" id="taskInput" placeholder="Create a new task up to 150 characters" required>
 				
 				<button type="submit" class="btns">Add Task</button>
-			</div>
-		</form>
+			</form>
+		</div>
 	</header>
+
+	<div class="background-popup">
+		<div class="edit-popup">
+				<textarea class="textarea" rows="10"></textarea>
+				<button class="button-save" type="submit">Save</button>
+		</div>
+	</div>
 
 	<main class="main container">
 		<ul class="task-wrapper" id="tasksList">
-
 		</ul>
 	</main>
 
 	</div>
 	<script src="js/main.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.10/SmoothScroll.min.js" integrity="sha256-huW7yWl7tNfP7lGk46XE+Sp0nCotjzYodhVKlwaNeco=" crossorigin="anonymous"></script>
 </body>
 </html>

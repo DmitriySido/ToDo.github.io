@@ -3,6 +3,13 @@ const taskInput = document.querySelector('#taskInput')
 const taskList = document.querySelector('#tasksList')
 const emptyList = document.querySelector('#emptyList')
 
+const editButton = document.querySelector('.edit')
+const editPopup = document.querySelector('.edit-popup')
+const saveEditButton = editPopup.querySelector('.button-save')
+const textarea = editPopup.querySelector('.textarea')
+const backgroundPopup = document.querySelector('.background-popup ')
+const body = document.querySelector('.body')
+
 let tasks = []
 
 if(localStorage.getItem('tasks')){
@@ -12,14 +19,14 @@ if(localStorage.getItem('tasks')){
 
 checkEmptyList()
 
-//Добавление задачи
 form.addEventListener('submit', addTask)
 
-//Удаление задачи
 taskList.addEventListener('click', deleteTask)
 
-//Отмучаем задачу Выполненой
 taskList.addEventListener('click', doneTask)
+
+taskList.addEventListener('click', editTask)
+
 
 //Функции
 function addTask(event){
@@ -56,7 +63,7 @@ function deleteTask(event){
 	//Проверяем если клик был НЕ по кнопке *Удалить задачу*
 	if(event.target.dataset.action !== 'delete') return
 
-	//Проверяем что клик был по кнопку *Удалить задачу*
+	//Проверяем что клик был по кнопке *Удалить задачу*
 	const parentNode = event.target.closest('li')
 
 	//Определяем ID задачи
@@ -65,23 +72,27 @@ function deleteTask(event){
 	//Находим индекс задачи в массиве
 	const index = tasks.findIndex((task) => task.id === id)
 
-	//Удаляем задачу из массива
 	tasks.splice(index, 1)
 
-	//Сохранение задачи
 	saveToLocalStorage()
 
+	const classArray = ['inactive-1', 'inactive-2', 'inactive-3']
+
+	function arrayRandElement(classArray) {
+    let rand = Math.floor(Math.random() * classArray.length);
+    return classArray[rand];
+	}
+
 	//Удаляем из разметки задачу
-	parentNode.remove()
+	parentNode.classList.add(arrayRandElement(classArray))
+	let timerToDelete = setTimeout(() => parentNode.remove(), 700);
 
 	checkEmptyList()
 }
 
 function doneTask(event){
-	//Проверяем если клик был НЕ по кнопке *Задача выполнена*
 	if(event.target.dataset.action !== 'done') return
 
-	//Проверяем что клик был по кнопке *Задача выполнена*
 	const parentNode = event.target.closest('li')
 	
 	//Определяем ID задачи
@@ -89,7 +100,6 @@ function doneTask(event){
 	const task = tasks.find((task) => task.id === id)
 	task.done = !task.done
 
-	//Сохранение задачи
 	saveToLocalStorage()
 
 	const taskTitle = parentNode.querySelector('.task-text')
@@ -98,10 +108,8 @@ function doneTask(event){
 
 function checkEmptyList(){
 	if(tasks.length === 0){
-		const emptyListHTML = `
-				<li id="emptyList">Your to-do list is empty!</li>`
-
-		taskList.insertAdjacentHTML('afterbegin', emptyListHTML)
+		const emptyListHTML = `<li id="emptyList">Your to-do list is empty!</li>`
+		let timerToAdd = setTimeout(() => taskList.insertAdjacentHTML('afterbegin', emptyListHTML), 1000);
 	}
 
 	if(tasks.length > 0){
@@ -112,6 +120,39 @@ function checkEmptyList(){
 
 function saveToLocalStorage(){
 	localStorage.setItem('tasks', JSON.stringify(tasks))
+}
+
+function editTask(event){
+	if(event.target.dataset.action !== 'edit') return
+
+	const parentNode = event.target.closest('li')
+
+	const id = Number(parentNode.id)
+	const task = tasks.find((task) => task.id === id)
+
+	textarea.value = task.text
+
+	backgroundPopup.classList.add('active')
+	body.classList.add('disable-scrolling')
+	textarea.focus()
+
+	window.addEventListener('keydown', function(event){
+		if(event.keyCode === 13){
+			let editText = task.text.textContent = textarea.value
+			task.text = editText
+			
+			saveToLocalStorage()
+			location.reload()
+		}
+	})
+
+	saveEditButton.addEventListener('click', function(){
+		let editText = task.text.textContent = textarea.value
+		task.text = editText
+		
+		saveToLocalStorage()
+		location.reload()
+	})
 }
 
 function renderTask(task){
@@ -126,6 +167,11 @@ function renderTask(task){
 					<button class="task-button done" data-action="done">
 						<img class="button-img" src="img/check-mark.png" alt="Done Button">
 					</button>
+
+					<button class="task-button edit" data-action="edit">
+						<img class="button-img" src="img/edit.png" alt="Done Button">
+					</button>
+
 					<button class="task-button delete" data-action="delete">
 						<img class="button-img" src="img/check-mark__delete.png" alt="Delete Button">
 					</button>
