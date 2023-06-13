@@ -326,7 +326,7 @@ body{
 
   .edit-popup {
     padding: 30px;
-    height: 40vh;
+    height: 47vh;
   }
 
   .textarea{
@@ -349,6 +349,11 @@ body{
 
   .form-input::placeholder{
     font-size: calc(var(--index) * 0.9);
+  }
+
+  .edit-popup {
+    padding: 30px;
+    height: 40vh;
   }
 }
 
@@ -483,8 +488,10 @@ body{
   }
 
   .edit-popup{
-    height: 47vh;
+    height: 44vh;
   }
+
+
 
   .form-input{
     font-size: calc(var(--index) * 1.3);
